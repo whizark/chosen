@@ -1,0 +1,35 @@
+source: ./src
+destination: api
+extensions: [php]
+exclude:
+skipDocPath:
+skipDocPrefix:
+charset: UTF-8
+main:
+
+title: Chosen
+baseUrl:
+googleCseId:
+googleCseLabel:
+googleAnalytics:
+# templateConfig: './templates/default/config.neon'
+groups: auto
+allowedHtml: [b, i, a, ul, ol, li, p, br, var, samp, kbd, tt]
+autocomplete: [classes, constants, functions]
+
+accessLevels: [public, protected]
+internal: Yes
+php: Yes
+tree: Yes
+deprecated: No
+todo: No
+sourceCode: Yes
+download: Yes
+report:
+
+wipeout: Yes
+quiet: No
+progressbar: Yes
+colors: Yes
+updateCheck: Yes
+debug: No
