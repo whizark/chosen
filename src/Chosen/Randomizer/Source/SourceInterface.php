@@ -17,6 +17,8 @@ interface SourceInterface
      * @param int $length The length of the generated string.
      *
      * @return string The generated string.
+     *
+     * @throws \Chosen\Exception\Logic\OutOfRangeException
      */
     public function generate($length);
 }
