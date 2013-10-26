@@ -31,6 +31,9 @@
         "satooshi/php-coveralls": "dev-master",
         "apigen/apigen"         : "dev-master"
     },
+    "suggest"          : {
+        "ext-openssl" : "Enabling the openssl extension allows you to use a cryptographically secure pseudo-random number generator"
+    },
     "autoload"         : {
         "psr-0"        : {
             "Chosen\\"  : "src/"
