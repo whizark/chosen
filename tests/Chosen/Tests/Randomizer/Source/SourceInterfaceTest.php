@@ -24,14 +24,14 @@ abstract class SourceInterfaceTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \Chosen\Exception\Logic\OutOfRangeException
      */
-    final public function testGenerateMustThrowOutOfRangeExceptionWhenANegativeValueIsPassed()
+    public function testGenerateMustThrowOutOfRangeExceptionWhenANegativeValueIsPassed()
     {
         $source = $this->createSource();
 
         $source->generate(-1);
     }
 
-    final public function testGenerateMustReturnStringValue()
+    public function testGenerateMustReturnStringValue()
     {
         $source = $this->createSource();
 
@@ -39,7 +39,7 @@ abstract class SourceInterfaceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_string($result));
     }
 
-    final public function testGenerateMustReturnNoBytesWhen0IsPassed()
+    public function testGenerateMustReturnNoBytesWhen0IsPassed()
     {
         $source = $this->createSource();
 
@@ -47,7 +47,7 @@ abstract class SourceInterfaceTest extends PHPUnit_Framework_TestCase
         $this->assertSame(0, strlen($result));
     }
 
-    final public function testGenerateMustReturnCertainLengthRandomBytes()
+    public function testGenerateMustReturnCertainLengthRandomBytes()
     {
         $source = $this->createSource();
 
