@@ -22,6 +22,7 @@ interface RandomizerInterface
      * @return int The generated number, which is from $min through $max.
      *
      * @throws \Chosen\Exception\Logic\OutOfRangeException
+     * @throws \Chosen\Exception\Logic\DomainException
      */
     public function generate($min = null, $max = null);
 
