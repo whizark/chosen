@@ -97,10 +97,10 @@ class Randomizer implements RandomizerInterface
                                              : (int) (1 << $bits) - 1;
 
         do {
-            $rnd = hexdec(bin2hex($this->source->generate($bytes)));
-            $rnd = $rnd & $mask;
-        } while ($rnd > $range);
+            $rand = hexdec(bin2hex($this->source->generate($bytes)));
+            $rand = $rand & $mask;
+        } while ($rand > $range);
 
-        return $rnd;
+        return $rand;
     }
 }
