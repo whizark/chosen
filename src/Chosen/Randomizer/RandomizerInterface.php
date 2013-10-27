@@ -22,4 +22,18 @@ interface RandomizerInterface
      * @throws \Chosen\Exception\Logic\OutOfRangeException
      */
     public function generate($min, $max);
+
+    /**
+     * Returns the largest possible random number.
+     *
+     * @return int The minimum number that can be returned by a call to generate().
+     */
+    public function getMin();
+
+    /**
+     * Returns the smallest possible random number.
+     *
+     * @return int The maxmum number that can be returned by a call to generate().
+     */
+    public function getMax();
 }

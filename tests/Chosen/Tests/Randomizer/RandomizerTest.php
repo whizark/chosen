@@ -20,25 +20,28 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
         Mockery::close();
     }
 
-    /**
-     * @expectedException \Chosen\Exception\Logic\OutOfRangeException
-     */
-    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMinValueIsLessThan0()
+    public function testGetMinMustReturnIntegerValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
-        $source->shouldReceive('generate')
-               ->never()
-               ->ordered();
 
         $randomizer = new Randomizer($source);
 
-        $randomizer->generate(-1);
+        $this->assertTrue(is_int($randomizer->getMin()));
+    }
+
+    public function testGetMaxMustReturnIntegerValue()
+    {
+        $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
+
+        $randomizer = new Randomizer($source);
+
+        $this->assertTrue(is_int($randomizer->getMax()));
     }
 
     /**
      * @expectedException \Chosen\Exception\Logic\OutOfRangeException
      */
-    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMaxValueIsLessThan0()
+    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMinValueIsLessThanGetMinValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
         $source->shouldReceive('generate')
@@ -47,13 +50,13 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
 
         $randomizer = new Randomizer($source);
 
-        $randomizer->generate(0, -1);
+        $randomizer->generate($randomizer->getMin() - 1);
     }
 
     /**
      * @expectedException \Chosen\Exception\Logic\OutOfRangeException
      */
-    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMinValueIsGreaterThanTheMaxValue()
+    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMaxValueIsLessThanGetMinValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
         $source->shouldReceive('generate')
@@ -62,13 +65,13 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
 
         $randomizer = new Randomizer($source);
 
-        $randomizer->generate(Randomizer::MAX_VALUE + 1);
+        $randomizer->generate($randomizer->getMin(), $randomizer->getMin() - 1);
     }
 
     /**
      * @expectedException \Chosen\Exception\Logic\OutOfRangeException
      */
-    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMaxValueIsGreaterThanTheMaxValue()
+    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMinValueIsGreaterThanGetMaxValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
         $source->shouldReceive('generate')
@@ -77,13 +80,28 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
 
         $randomizer = new Randomizer($source);
 
-        $randomizer->generate(0, Randomizer::MAX_VALUE + 1);
+        $randomizer->generate($randomizer->getMax() + 1);
+    }
+
+    /**
+     * @expectedException \Chosen\Exception\Logic\OutOfRangeException
+     */
+    public function testGenerateMustThrowOutOfRangeExceptionWhenTheMaxValueIsGreaterThanGetMaxValue()
+    {
+        $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
+        $source->shouldReceive('generate')
+               ->never()
+               ->ordered();
+
+        $randomizer = new Randomizer($source);
+
+        $randomizer->generate($randomizer->getMin(), $randomizer->getMax() + 1);
     }
 
     /**
      * @expectedException \Chosen\Exception\Logic\DomainException
      */
-    public function testGenerateMustThrowDomainExceptionWhenTheMinValueIsGreaterThanTheMaxValue()
+    public function testGenerateMustThrowDomainExceptionWhenTheMinValueIsGreaterThanGetMaxValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
         $source->shouldReceive('generate')
@@ -92,10 +110,10 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
 
         $randomizer = new Randomizer($source);
 
-        $randomizer->generate(Randomizer::MAX_VALUE, 0);
+        $randomizer->generate($randomizer->getMax(), $randomizer->getMin());
     }
 
-    public function testGenerateMustReturnTheMaxValueWhenOnlyTheMinValueIsPassedAndItIsTheMaxValueOfRandomizer()
+    public function testGenerateMustReturnTheMaxValueWhenOnlyTheMinValueIsPassedAndItIsGetMaxValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
         $source->shouldReceive('generate')
@@ -104,11 +122,11 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
 
         $randomizer = new Randomizer($source);
 
-        $result = $randomizer->generate(Randomizer::MAX_VALUE);
-        $this->assertSame(Randomizer::MAX_VALUE, $result);
+        $result = $randomizer->generate($randomizer->getMax());
+        $this->assertSame($randomizer->getMax(), $result);
     }
 
-    public function testGenerateMustReturnTheMinValueWhenOnlyTheMaxValueIsPassedAndItIs0()
+    public function testGenerateMustReturnTheMinValueWhenOnlyTheMaxValueIsPassedAndItIsGetMinValue()
     {
         $source = Mockery::mock('Chosen\\Randomizer\\Source\\SourceInterface');
         $source->shouldReceive('generate')
@@ -117,9 +135,9 @@ class RandomizerTest extends PHPUnit_Framework_TestCase
 
         $randomizer = new Randomizer($source);
 
-        $result = $randomizer->generate(null, 0);
+        $result = $randomizer->generate(null, $randomizer->getMin());
 
-        $this->assertSame(0, $result);
+        $this->assertSame($randomizer->getMin(), $result);
     }
 
     public function testGenerateMustReturnARandomNumberInTheRange()

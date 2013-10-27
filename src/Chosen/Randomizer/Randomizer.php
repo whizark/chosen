@@ -14,11 +14,6 @@ use Chosen\Randomizer\Source\SourceInterface;
 class Randomizer implements RandomizerInterface
 {
     /**
-     * @type int The maximum number this class generates.
-     */
-    const MAX_VALUE = PHP_INT_MAX;
-
-    /**
      * @var Source\SourceInterface An instance of a class which implements SourceInterface.
      */
     private $source = null;
@@ -38,8 +33,8 @@ class Randomizer implements RandomizerInterface
      */
     public function generate($min = null, $max = null)
     {
-        $min   = ($min !== null) ? (int) $min : 0;
-        $max   = ($max !== null) ? (int) $max : static::MAX_VALUE;
+        $min   = ($min !== null) ? (int) $min : $this->getMin();
+        $max   = ($max !== null) ? (int) $max : $this->getMax();
         $range = $this->calculateRange($min, $max);
 
         if ($range === 0) {
@@ -49,6 +44,22 @@ class Randomizer implements RandomizerInterface
         $rnd = $this->generateNumberInRange($range);
 
         return $min + $rnd;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMin()
+    {
+        return 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMax()
+    {
+        return PHP_INT_MAX;
     }
 
     /**
@@ -64,8 +75,8 @@ class Randomizer implements RandomizerInterface
      */
     private function calculateRange($min, $max)
     {
-        if ($min < 0 || $max < 0 || $min > static::MAX_VALUE || $max > static::MAX_VALUE) {
-            throw new OutOfRangeException(sprintf('The min/max value must be 0-%d.', static::MAX_VALUE));
+        if ($min < $this->getMin() || $max < $this->getMin() || $min > $this->getMax() || $max > $this->getMax()) {
+            throw new OutOfRangeException(sprintf('The min/max value must be %d-%d.', $this->getMin(), $this->getMax()));
         }
 
         if ($min > $max) {
