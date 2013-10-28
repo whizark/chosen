@@ -1,3 +1,3 @@
 <?php
 $loader = require(dirname(__DIR__) . '/vendor/autoload.php');
-$loader->add('Tests', __DIR__);
+$loader->add('Chosen\\Tests\\', __DIR__);
