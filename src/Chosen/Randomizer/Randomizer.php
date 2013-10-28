@@ -76,7 +76,8 @@ class Randomizer implements RandomizerInterface
     private function calculateRange($min, $max)
     {
         if ($min < $this->getMin() || $max < $this->getMin() || $min > $this->getMax() || $max > $this->getMax()) {
-            throw new OutOfRangeException(sprintf('The min/max value must be %d-%d.', $this->getMin(), $this->getMax()));
+            $message = sprintf('The min/max value must be %d-%d.', $this->getMin(), $this->getMax());
+            throw new OutOfRangeException($message);
         }
 
         if ($min > $max) {
